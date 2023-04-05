@@ -28,12 +28,12 @@ builder.Services.AddScoped<IRepositoryFornecedor, RepositoryFornecedor>();
 builder.Services.AddScoped<IRepositoryBairro, RepositoryBairro>();
 
 builder.Services.AddScoped<IFornecedorService, FornecedorService>();
-builder.Services.AddHostedService<ProcessMessageConsumer>();
+builder.Services.AddScoped<ProcessMessageConsumer>();
 builder.Services.Configure<RabbitMqConfiguration>(builder.Configuration.GetSection("RabbitMqConfig"));
 
-builder.Services.AddScoped<IRabbitMqConsumerBairro, RabbitMqConsumerBairro>();
+builder.Services.AddSingleton<IRabbitMqConsumerBairro, RabbitMqConsumerBairro>();
 
-builder.Services.AddScoped<IFornecedorValidations, FornecedorValidations>();
+builder.Services.AddSingleton<IFornecedorValidations, FornecedorValidations>();
 
 builder.Services.AddCors(options =>
 {

@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MsFornecedor.Migrations
 {
     [DbContext(typeof(MsFornecedorContext))]
-    [Migration("20230405201217_Initial")]
+    [Migration("20230405204330_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -24,6 +24,28 @@ namespace MsFornecedor.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("MsFornecedor.Repositorys.Entidades.Bairro", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("Id");
+
+                    b.Property<Guid>("EmpresaId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("EmpresaId");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("Nome");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Bairro");
+                });
 
             modelBuilder.Entity("MsFornecedor.Repositorys.Entidades.Fornecedor", b =>
                 {

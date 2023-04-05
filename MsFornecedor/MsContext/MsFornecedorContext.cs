@@ -11,5 +11,6 @@ namespace MsFornecedor.MsContext
         }
 
         public DbSet<Fornecedor> Fornecedor { get; set; }
+        public DbSet<Bairro> Bairro { get; set; }
     }
 }

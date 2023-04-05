@@ -22,6 +22,28 @@ namespace MsFornecedor.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("MsFornecedor.Repositorys.Entidades.Bairro", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("Id");
+
+                    b.Property<Guid>("EmpresaId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("EmpresaId");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("Nome");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Bairro");
+                });
+
             modelBuilder.Entity("MsFornecedor.Repositorys.Entidades.Fornecedor", b =>
                 {
                     b.Property<int>("Id")

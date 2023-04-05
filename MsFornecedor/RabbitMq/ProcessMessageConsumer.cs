@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.Options;
 using MsFornecedor.Repositorys.Entidades;
 using MsFornecedor.Repositorys.Interfaces;
+using MsFornecedor.Services.Interfaces;
+using MsFornecedor.Services.Service;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
@@ -14,10 +16,10 @@ namespace MsFornecedor.RabbitMq
 
         private readonly IConnection _connection;
         private readonly IModel _channel;
-        private readonly IRepositoryBairro _repository;
-        public ProcessMessageConsumer(IOptions<RabbitMqConfiguration> option,IRepositoryBairro bairro)
+        private readonly IRepositoryBairro _repositoryBairro;
+        public ProcessMessageConsumer(IOptions<RabbitMqConfiguration> option, IRepositoryBairro repositoryBairro)
         {
-            _repository = bairro;
+            _repositoryBairro = repositoryBairro;
             _configuration = option.Value;
             var factory = new ConnectionFactory
             {
@@ -42,7 +44,8 @@ namespace MsFornecedor.RabbitMq
                 var body = e.Body.ToArray();
                 var message = Encoding.UTF8.GetString(body);
                 var meesage1 = JsonSerializer.Deserialize<Bairro>(message);
-                _repository.AdicionarBairro(meesage1);
+                _repositoryBairro.AdicionarBairro(meesage1);
+                
                 //chamar repository
 
                 _channel.BasicAck(e.DeliveryTag, false);
