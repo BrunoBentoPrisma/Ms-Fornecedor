@@ -1,10 +1,10 @@
 ﻿using Microsoft.Extensions.Options;
 using MsFornecedor.Repositorys.Entidades;
+using MsFornecedor.Repositorys.Interfaces;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
 using System.Text.Json;
-using System.Threading.Channels;
 
 namespace MsFornecedor.RabbitMq
 {
@@ -14,14 +14,16 @@ namespace MsFornecedor.RabbitMq
 
         private readonly IConnection _connection;
         private readonly IModel _channel;
-        public ProcessMessageConsumer(IOptions<RabbitMqConfiguration> option)
+        private readonly IRepositoryBairro _repository;
+        public ProcessMessageConsumer(IOptions<RabbitMqConfiguration> option,IRepositoryBairro bairro)
         {
+            _repository = bairro;
             _configuration = option.Value;
             var factory = new ConnectionFactory
             {
                 HostName = "mensageria.prismafive.com.br",
-                UserName = "prismafive",
-                Password = "prixpto"
+                UserName = "maconha",
+                Password = "151580"
             };
             _connection = factory.CreateConnection();
 
@@ -40,7 +42,7 @@ namespace MsFornecedor.RabbitMq
                 var body = e.Body.ToArray();
                 var message = Encoding.UTF8.GetString(body);
                 var meesage1 = JsonSerializer.Deserialize<Bairro>(message);
-
+                _repository.AdicionarBairro(meesage1);
                 //chamar repository
 
                 _channel.BasicAck(e.DeliveryTag, false);
