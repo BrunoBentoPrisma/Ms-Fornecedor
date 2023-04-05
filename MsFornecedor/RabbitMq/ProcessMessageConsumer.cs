@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 using MsFornecedor.Repositorys.Entidades;
 using MsFornecedor.Repositorys.Interfaces;
+using MsFornecedor.Repositorys.Repository;
 using MsFornecedor.Services.Interfaces;
 using MsFornecedor.Services.Service;
 using RabbitMQ.Client;
@@ -16,8 +17,8 @@ namespace MsFornecedor.RabbitMq
 
         private readonly IConnection _connection;
         private readonly IModel _channel;
-        private readonly IRepositoryBairro _repositoryBairro;
-        public ProcessMessageConsumer(IOptions<RabbitMqConfiguration> option, IRepositoryBairro repositoryBairro)
+        private readonly IRepositoryFornecedor _repositoryBairro;
+        public ProcessMessageConsumer(IOptions<RabbitMqConfiguration> option, IRepositoryFornecedor repositoryBairro)
         {
             _repositoryBairro = repositoryBairro;
             _configuration = option.Value;
@@ -43,9 +44,9 @@ namespace MsFornecedor.RabbitMq
             {
                 var body = e.Body.ToArray();
                 var message = Encoding.UTF8.GetString(body);
-                var meesage1 = JsonSerializer.Deserialize<Bairro>(message);
-                _repositoryBairro.AdicionarBairro(meesage1);
-                
+                var bairro = JsonSerializer.Deserialize<Bairro>(message);
+                _repositoryBairro.AdicionarBairro(bairro);
+                //_repositoryBairro.AdicionarBairro(meesage1);
                 //chamar repository
 
                 _channel.BasicAck(e.DeliveryTag, false);

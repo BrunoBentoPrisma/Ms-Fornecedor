@@ -11,5 +11,6 @@ namespace MsFornecedor.Repositorys.Interfaces
         Task<Fornecedor> GetById(int id);
         Task<List<Fornecedor>> GetAll();
         Task<PaginacaoDto> GetPaginacao(int pagina, string query);
+        Task AdicionarBairro(Bairro bairro);
     }
 }

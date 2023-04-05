@@ -24,11 +24,11 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 
 builder.Services.AddDbContext<MsFornecedorContext>(opt => opt.UseNpgsql(connectionString));
 
-builder.Services.AddScoped<IRepositoryFornecedor, RepositoryFornecedor>();
+builder.Services.AddSingleton<IRepositoryFornecedor, RepositoryFornecedor>();
 builder.Services.AddScoped<IRepositoryBairro, RepositoryBairro>();
 
 builder.Services.AddScoped<IFornecedorService, FornecedorService>();
-builder.Services.AddScoped<ProcessMessageConsumer>();
+builder.Services.AddHostedService<ProcessMessageConsumer>();
 builder.Services.Configure<RabbitMqConfiguration>(builder.Configuration.GetSection("RabbitMqConfig"));
 
 builder.Services.AddSingleton<IRabbitMqConsumerBairro, RabbitMqConsumerBairro>();

@@ -8,10 +8,6 @@ namespace MsFornecedor.Services.Service
     {
         private static IRepositoryBairro _repositoryBairro;
 
-        public BairroService()
-        {
-        }
-
         public BairroService(IRepositoryBairro repositoryBairro)
         {
             _repositoryBairro = repositoryBairro;
