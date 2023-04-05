@@ -1,6 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Net.Http.Headers;
 using MsFornecedor.MsContext;
+using MsFornecedor.RabbitMq;
+using MsFornecedor.RabbitMqClient.Intefaces;
+using MsFornecedor.RabbitMqClient.RabbitMqClient;
 using MsFornecedor.Repositorys.Interfaces;
 using MsFornecedor.Repositorys.Repository;
 using MsFornecedor.Services.Interfaces;
@@ -23,7 +26,11 @@ builder.Services.AddDbContext<MsFornecedorContext>(opt => opt.UseNpgsql(connecti
 
 builder.Services.AddScoped<IRepositoryFornecedor, RepositoryFornecedor>();
 
-builder.Services.AddScoped<IFornecedorService,FornecedorService>();
+builder.Services.AddScoped<IFornecedorService, FornecedorService>();
+builder.Services.AddHostedService<ProcessMessageConsumer>();
+builder.Services.Configure<RabbitMqConfiguration>(builder.Configuration.GetSection("RabbitMqConfig"));
+
+builder.Services.AddScoped<IRabbitMqConsumerBairro, RabbitMqConsumerBairro>();
 
 builder.Services.AddScoped<IFornecedorValidations, FornecedorValidations>();
 
