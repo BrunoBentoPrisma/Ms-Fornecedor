@@ -18,6 +18,8 @@ namespace MsFornecedor.RabbitMq
         private readonly IConnection _connection;
         private readonly IModel _channel;
         private readonly IRepositoryFornecedor _repositoryBairro;
+        private const string ExchangeName = "AdicionarBairro";
+        string QueueName = string.Empty;
         public ProcessMessageConsumer(IOptions<RabbitMqConfiguration> option, IRepositoryFornecedor repositoryBairro)
         {
             _repositoryBairro = repositoryBairro;
@@ -32,8 +34,10 @@ namespace MsFornecedor.RabbitMq
 
             _channel = _connection.CreateModel();
 
-            _channel.QueueDeclare("AdicionarBairro", durable: true, exclusive: false, autoDelete: false, arguments: null);
-
+            //_channel.QueueDeclare("AdicionarBairro", durable: true, exclusive: false, autoDelete: false, arguments: null);
+            _channel.ExchangeDeclare(ExchangeName, ExchangeType.Fanout);
+            QueueName = _channel.QueueDeclare().QueueName;
+            _channel.QueueBind(QueueName, ExchangeName, "");
         }
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
@@ -52,7 +56,7 @@ namespace MsFornecedor.RabbitMq
                 _channel.BasicAck(e.DeliveryTag, false);
             };
 
-            _channel.BasicConsume("AdicionarBairro", false, consumer);
+            _channel.BasicConsume(QueueName, false, consumer);
 
             return Task.CompletedTask;
         }
